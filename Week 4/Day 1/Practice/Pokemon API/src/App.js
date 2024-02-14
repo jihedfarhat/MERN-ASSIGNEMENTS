@@ -1,34 +1,41 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 const App = () => {
-  const [pokemon, setPokemon] = useState([]);
 
-  const fetchPokemon = () => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=807")
-      .then((serverResponse) => {
-        return serverResponse.json();
-      })
-      .then((actualServerResponse) => {
-        console.log(actualServerResponse.results);
-        setPokemon(actualServerResponse.results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const [pokemons, setPokemons] = useState({});
+  const [sendRequest, setSendRequest] = useState(false);
+
+  useEffect(() => {
+      if(sendRequest){
+          fetch('https://pokeapi.co/api/v2/pokemon/?limit=807')
+              .then(response => response.json())
+              .then(response => {
+                  setPokemons(response.results)
+                  
+              })
+              .catch()
+          setSendRequest(false);
+      }
+  }, [sendRequest]);
+
+  const onClick = (e) => {
+      setSendRequest(true)
+  }
+  
   return (
-    <div className="App">
-      <h1>Pokemon 🃏</h1>
-      <button onClick={fetchPokemon}>Fetch Pokemon</button>
-      {/* <div>{JSON.stringify(pokemon)}</div> */}
-      <div>
-        {pokemon.map((poke) => {
-          return (
-            <ul>
-              <li>{poke.name}</li>
-            </ul>
-          );
-        })}
+    <div className="App bg-light p-3 text-left">
+      <div className="w-25 mt-2 mx-auto">
+        <button className="btn btn-secondary mb-3 d-block" onClick={onClick}>
+          {" "}
+          Fetch Pokemon
+        </button>
+        <p className="mb-1">List of Pokemons: </p>
+        <ol>
+          {pokemons.length > 0 &&
+            pokemons.map((pokemon, index) => (
+              <li key={index}>{pokemon.name}</li>
+            ))}
+        </ol>
       </div>
     </div>
   );
