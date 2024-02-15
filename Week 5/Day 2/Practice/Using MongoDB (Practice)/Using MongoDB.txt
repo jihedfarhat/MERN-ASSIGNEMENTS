@@ -1,0 +1,74 @@
+use my_first_db
+
+db.createCollection('students')
+
+db.students.insertMany([
+  {
+    name: 'John',
+    home_state: 'California',
+    lucky_number: 7,
+    birthday: { month: 3, day: 15, year: 2000 }
+  },
+  {
+    name: 'Sarah',
+    home_state: 'Washington',
+    lucky_number: 12,
+    birthday: { month: 6, day: 27, year: 1998 }
+  },
+  {
+    name: 'Michael',
+    home_state: 'California',
+    lucky_number: 5,
+    birthday: { month: 11, day: 9, year: 2002 }
+  },
+  {
+    name: 'Emily',
+    home_state: 'Washington',
+    lucky_number: 8,
+    birthday: { month: 9, day: 4, year: 2001 }
+  },
+  {
+    name: 'David',
+    home_state: 'California',
+    lucky_number: 3,
+    birthday: { month: 2, day: 22, year: 1999 }
+  }
+])
+
+db.students.find()
+
+db.students.find({ $or: [{ home_state: 'California' }, { home_state: 'Washington' }] })
+
+db.students.find({ lucky_number: { $gt: 3 } })
+
+db.students.find({ lucky_number: { $lte: 10 } })
+
+db.students.find({ lucky_number: { $gte: 1, $lte: 9 } })
+
+db.students.updateMany({}, { $set: { interests: ['coding', 'brunch', 'MongoDB'] } })
+
+db.students.updateOne({ name: 'John' }, { $push: { interests: 'hiking' } })
+db.students.updateOne({ name: 'Sarah' }, { $push: { interests: 'reading' } })
+db.students.updateOne({ name: 'Michael' }, { $push: { interests: 'gaming' } })
+db.students.updateOne({ name: 'Emily' }, { $push: { interests: 'painting' } })
+db.students.updateOne({ name: 'David' }, { $push: { interests: 'traveling' } })
+
+db.students.updateOne({ name: 'John' }, { $push: { interests: 'taxes' } })
+
+db.students.updateOne({ name: 'John' }, { $pull: { interests: 'taxes' } })
+
+db.students.deleteMany({ home_state: 'California' })
+
+db.students.deleteOne({ name: 'Emily' })
+
+db.students.deleteOne({ lucky_number: { $gt: 5 } })
+
+db.students.updateMany({}, { $set: { number_of_belts: 0 } })
+
+db.students.updateMany({ home_state: 'Washington' }, { $inc: { number_of_belts: 1 } })
+
+db.students.updateMany({}, { $rename: { number_of_belts: 'belts_earned' } })
+
+db.students.updateMany({}, { $unset: { lucky_number: 1 } })
+
+db.students.updateMany({}, { $set: { updated_on: new Date() } })
